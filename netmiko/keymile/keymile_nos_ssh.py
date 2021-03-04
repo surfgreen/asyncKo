@@ -1,4 +1,3 @@
-import time
 import asyncio
 import re
 
@@ -13,7 +12,7 @@ class KeymileNOSSSH(CiscoIosBase):
         self.set_base_prompt()
         self.disable_paging()
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def _test_channel_read(self, count=40, pattern=""):
         """Since Keymile NOS always returns True on paramiko.connect() we

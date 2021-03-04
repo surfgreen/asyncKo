@@ -30,7 +30,7 @@ except ImportError:
 try:
     from importlib.resources import path as importresources_path
 except ModuleNotFoundError:
-    from importlib_resources import path as importresources_path
+    from importlib.resources import path as importresources_path
 
 try:
     import serial.tools.list_ports

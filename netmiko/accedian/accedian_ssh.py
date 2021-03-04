@@ -1,15 +1,14 @@
-import time
 import asyncio
 from netmiko.cisco_base_connection import CiscoSSHConnection
 
 
 class AccedianSSH(CiscoSSHConnection):
     async def session_preparation(self):
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def check_enable_mode(self, *args, **kwargs):
         raise AttributeError("Accedian devices do not support enable mode!")

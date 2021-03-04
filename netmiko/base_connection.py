@@ -487,7 +487,6 @@ class BaseConnection(object):
                 log.error("Unable to send", exc_info=True)
                 # If unable to send, we can tell for sure that the connection is unusable
                 return False
-        return False
 
     def _read_channel(self):
         """Generic handler that will read all the data from an SSH or telnet channel."""
@@ -566,7 +565,7 @@ class BaseConnection(object):
             if self.protocol == "ssh":
                 try:
                     # If no data available will wait timeout seconds trying to read
-                    self._lock_netmiko_session()
+                    await self._lock_netmiko_session()
                     new_data = self.remote_conn.recv(MAX_BUFFER)
                     if len(new_data) == 0:
                         raise EOFError("Channel stream closed by remote device.")
@@ -791,7 +790,7 @@ class BaseConnection(object):
             self.disconnect()
             raise
 
-    def session_preparation(self):
+    async def session_preparation(self):
         """
         Prepare the session after the connection has been established
 
@@ -805,14 +804,14 @@ class BaseConnection(object):
         self.set_terminal_width()
         self.clear_buffer()
         """
-        self._test_channel_read()
-        self.set_base_prompt()
-        self.set_terminal_width()
-        self.disable_paging()
+        await self._test_channel_read()
+        await self.set_base_prompt()
+        await self.set_terminal_width()
+        await self.disable_paging()
 
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def _use_ssh_config(self, dict_arg):
         """Update SSH connection parameters based on contents of SSH config file.
@@ -995,7 +994,7 @@ Device settings: {self.device_type} {self.host}:{self.port}
         return ""
 
     # @m_exec_time
-    async def _test_channel_read(self, count=40, pattern=""):
+    async def _test_channel_read(self, count=40, pattern="") -> object:
         """Try to read the channel (generally post login) verify you receive data back.
 
         :param count: the number of times to check the channel for data
@@ -1156,7 +1155,7 @@ Device settings: {self.device_type} {self.host}:{self.port}
         :param delay_factor: See __init__: global_delay_factor
         :type delay_factor: int
         """
-        prompt = self.find_prompt(delay_factor=delay_factor)
+        prompt = await self.find_prompt(delay_factor=delay_factor)
         if not prompt[-1] in (pri_prompt_terminator, alt_prompt_terminator):
             raise ValueError(f"Router prompt not found: {repr(prompt)}")
         # Strip off trailing terminator
@@ -1170,7 +1169,7 @@ Device settings: {self.device_type} {self.host}:{self.port}
         :type delay_factor: int
         """
         delay_factor = self.select_delay_factor(delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
         self.write_channel(self.RETURN)
         sleep_time = delay_factor * 0.1
         await asyncio.sleep(sleep_time)
@@ -1199,7 +1198,7 @@ Device settings: {self.device_type} {self.host}:{self.port}
         if not prompt:
             raise ValueError(f"Unable to find prompt: {prompt}")
         await asyncio.sleep(delay_factor * 0.1)
-        self.clear_buffer()
+        await self.clear_buffer()
         log.debug(f"[find_prompt()]: prompt is {prompt}")
         return prompt
 
@@ -1480,7 +1479,7 @@ Device settings: {self.device_type} {self.host}:{self.port}
             command_string = self.normalize_cmd(command_string)
 
         await asyncio.sleep(delay_factor * loop_delay)
-        self.clear_buffer()
+        await self.clear_buffer()
         self.write_channel(command_string)
         new_data = ""
 

@@ -39,7 +39,6 @@ Examples
 >>> connection = ConnectHandler(**remote_device)
 """
 import re
-import time
 import asyncio
 from netmiko.ssh_dispatcher import ConnectHandler
 from netmiko.base_connection import BaseConnection

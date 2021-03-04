@@ -79,7 +79,7 @@ class MikrotikBase(CiscoSSHConnection):
         else:
             return a_string
 
-    def strip_command(self, command_string, output):
+    async def strip_command(self, command_string, output):
         """
         Strip command_string from output string
 
@@ -92,7 +92,7 @@ class MikrotikBase(CiscoSSHConnection):
         :param output: The returned output as a result of the command string sen
         :type output: str
         """
-        command_length = len(self.find_prompt()) + 2 * (len(command_string)) + 2
+        command_length = len(await self.find_prompt()) + 2 * (len(command_string)) + 2
         return output[command_length:]
 
 

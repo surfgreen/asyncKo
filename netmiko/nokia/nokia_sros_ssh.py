@@ -8,7 +8,6 @@
 
 import re
 import os
-import time
 import asyncio
 
 from netmiko import log
@@ -37,11 +36,11 @@ class NokiaSrosSSH(BaseConnection):
     """
 
     async def session_preparation(self):
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
         # "@" indicates model-driven CLI (vs Classical CLI)
         if "@" in self.base_prompt:
-            self._disable_complete_on_space()
+            await self._disable_complete_on_space()
             self.set_terminal_width(
                 command="environment console width 512", pattern="environment"
             )
@@ -56,7 +55,7 @@ class NokiaSrosSSH(BaseConnection):
 
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def set_base_prompt(self, *args, **kwargs):
         """Remove the > when navigating into the different config level."""

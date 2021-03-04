@@ -1,5 +1,4 @@
 import re
-import time
 import asyncio
 
 from cryptography.hazmat.primitives.asymmetric import dsa
@@ -25,14 +24,14 @@ class TPLinkJetStreamBase(CiscoSSHConnection):
         """
         delay_factor = self.select_delay_factor(delay_factor=0)
         await asyncio.sleep(0.3 * delay_factor)
-        self.clear_buffer()
-        self._test_channel_read(pattern=r"[>#]")
+        await self.clear_buffer()
+        await self._test_channel_read(pattern=r"[>#]")
         self.set_base_prompt()
         self.enable()
         self.disable_paging()
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def enable(self, cmd="", pattern="ssword", re_flags=re.IGNORECASE):
         """

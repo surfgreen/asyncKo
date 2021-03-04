@@ -1,5 +1,4 @@
 """Netmiko Cisco WLC support."""
-import time
 import asyncio
 import re
 import socket
@@ -104,7 +103,7 @@ class CiscoWlcSSH(BaseConnection):
 
         Cisco WLC uses "config paging disable" to disable paging
         """
-        self._test_channel_read()
+        await self._test_channel_read()
 
         try:
             self.set_base_prompt()
@@ -115,7 +114,7 @@ class CiscoWlcSSH(BaseConnection):
         self.disable_paging(command="config paging disable")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     async def cleanup(self, command="logout"):
         """Reset WLC back to normal paging and gracefully close session."""

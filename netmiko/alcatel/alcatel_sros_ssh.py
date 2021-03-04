@@ -1,6 +1,5 @@
 """Alcatel-Lucent SROS support."""
 import re
-import time
 import asyncio
 from netmiko.cisco_base_connection import CiscoSSHConnection
 
@@ -8,13 +7,13 @@ from netmiko.cisco_base_connection import CiscoSSHConnection
 class AlcatelSrosSSH(CiscoSSHConnection):
     """Alcatel-Lucent SROS support."""
 
-     async def session_preparation(self):
-        self._test_channel_read()
-        self.set_base_prompt()
+    async def session_preparation(self):
+        await self._test_channel_read()
+        await self.set_base_prompt()
         self.disable_paging(command="environment no more")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def set_base_prompt(self, *args, **kwargs):
         """Remove the > when navigating into the different config level."""

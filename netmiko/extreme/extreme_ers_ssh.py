@@ -1,5 +1,4 @@
 """Netmiko support for Extreme Ethernet Routing Switch."""
-import time
 import asyncio
 from netmiko.cisco_base_connection import CiscoSSHConnection
 

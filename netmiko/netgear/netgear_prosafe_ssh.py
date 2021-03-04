@@ -1,5 +1,4 @@
 """ProSafe OS support"""
-import time
 import asyncio
 from netmiko.cisco_base_connection import CiscoSSHConnection
 
@@ -14,14 +13,14 @@ class NetgearProSafeSSH(CiscoSSHConnection):
 
     async def session_preparation(self):
         """ProSafe OS requires enabe mode to disable paging."""
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
         self.enable()
         self.disable_paging(command="terminal length 0")
 
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def check_config_mode(self, check_string="(Config)#"):
         return super().check_config_mode(check_string=check_string)

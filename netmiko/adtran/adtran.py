@@ -1,7 +1,7 @@
-import time
 import re
 import asyncio
 from netmiko.cisco_base_connection import CiscoBaseConnection
+
 
 class AdtranOSBase(CiscoBaseConnection):
     def __init__(self, *args, **kwargs):
@@ -9,15 +9,15 @@ class AdtranOSBase(CiscoBaseConnection):
             kwargs["global_cmd_verify"] = False
         return super().__init__(*args, **kwargs)
 
-    def session_preparation(self):
+    async def session_preparation(self):
         """Prepare the session after the connection has been established."""
         self.ansi_escape_codes = True
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
         self.disable_paging(command="terminal length 0")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def check_enable_mode(self, check_string="#"):
         return super().check_enable_mode(check_string=check_string)

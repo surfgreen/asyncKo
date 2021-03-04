@@ -1,7 +1,6 @@
 import os
 import re
 import socket
-import time
 import asyncio
 
 from netmiko.cisco_base_connection import CiscoSSHConnection

@@ -1,4 +1,3 @@
-import time
 import asyncio
 from telnetlib import IAC, DO, DONT, WILL, WONT, SB, SE, TTYPE
 from netmiko.cisco_base_connection import CiscoBaseConnection
@@ -13,13 +12,13 @@ class IpInfusionOcNOSBase(CiscoBaseConnection):
         return super().__init__(**kwargs)
 
     async def session_preparation(self):
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
         self.disable_paging(command="terminal length 0")
 
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def save_config(self, cmd="write", confirm=False, confirm_response=""):
         """Saves Config Using write command"""

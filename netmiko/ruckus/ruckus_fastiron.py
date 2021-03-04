@@ -1,5 +1,4 @@
 import re
-import time
 import asyncio
 from telnetlib import DO, DONT, ECHO, IAC, WILL, WONT
 from netmiko.cisco_base_connection import CiscoSSHConnection
@@ -10,13 +9,13 @@ class RuckusFastironBase(CiscoSSHConnection):
 
     async def session_preparation(self):
         """FastIron requires to be enable mode to disable paging."""
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
         self.enable()
         self.disable_paging(command="skip-page-display")
         # Clear the read buffer
-        asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await asyncio.sleep(0.3 * self.global_delay_factor)
+        await self.clear_buffer()
 
     def enable(
         self, cmd="enable", pattern=r"(ssword|User Name)", re_flags=re.IGNORECASE

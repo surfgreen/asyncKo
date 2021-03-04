@@ -1,13 +1,12 @@
 """Ruijie RGOS Support"""
 from netmiko.cisco_base_connection import CiscoBaseConnection
-import time
 import asyncio
 
 
 class RuijieOSBase(CiscoBaseConnection):
     async def session_preparation(self):
         """Prepare the session after the connection has been established."""
-        self._test_channel_read(pattern=r"[>#]")
+        await self._test_channel_read(pattern=r"[>#]")
         self.set_base_prompt()
         """Ruijie OS requires enable mode to set terminal width"""
         self.enable()
@@ -15,7 +14,7 @@ class RuijieOSBase(CiscoBaseConnection):
         self.disable_paging(command="terminal length 0")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def save_config(self, cmd="write", confirm=False, confirm_response=""):
         """Save config: write"""

@@ -1,5 +1,4 @@
 import re
-import time
 import asyncio
 
 from netmiko.base_connection import BaseConnection
@@ -55,7 +54,7 @@ class JuniperBase(BaseConnection):
             if re.search(r"root@", cur_prompt) or re.search(r"^%$", cur_prompt.strip()):
                 self.write_channel("cli" + self.RETURN)
                 await asyncio.sleep(0.3 * delay_factor)
-                self.clear_buffer()
+                await self.clear_buffer()
                 break
             elif ">" in cur_prompt or "#" in cur_prompt:
                 break

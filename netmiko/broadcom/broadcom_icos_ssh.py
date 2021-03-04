@@ -1,4 +1,3 @@
-import time
 import asyncio
 from netmiko.cisco_base_connection import CiscoSSHConnection
 
@@ -10,7 +9,7 @@ class BroadcomIcosSSH(CiscoSSHConnection):
     """
 
     async def session_preparation(self):
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
         self.enable()
         self.set_base_prompt()
@@ -19,7 +18,7 @@ class BroadcomIcosSSH(CiscoSSHConnection):
 
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def check_config_mode(self, check_string=")#"):
         """Checks if the device is in configuration mode or not."""

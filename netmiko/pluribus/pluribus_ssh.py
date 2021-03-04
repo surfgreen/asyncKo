@@ -1,4 +1,3 @@
-import time
 import asyncio
 from netmiko.base_connection import BaseConnection
 
@@ -16,12 +15,12 @@ class PluribusSSH(BaseConnection):
 
     async def session_preparation(self):
         """Prepare the netmiko session."""
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
         self.disable_paging()
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def check_config_mode(self, *args, **kwargs):
         """

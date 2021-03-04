@@ -1,4 +1,3 @@
-import time
 import asyncio
 
 from netmiko.cisco.cisco_ios import CiscoIosBase
@@ -11,10 +10,10 @@ class KeymileSSH(CiscoIosBase):
 
     async def session_preparation(self):
         """Prepare the session after the connection has been established."""
-        self._test_channel_read(pattern=r">")
+        await self._test_channel_read(pattern=r">")
         self.set_base_prompt()
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def disable_paging(self, *args, **kwargs):
         """Keymile does not use paging."""

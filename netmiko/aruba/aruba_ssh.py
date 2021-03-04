@@ -4,7 +4,6 @@ Aruba OS support.
 For use with Aruba OS Controllers.
 
 """
-import time
 import asyncio
 import re
 from netmiko.cisco_base_connection import CiscoSSHConnection
@@ -28,13 +27,13 @@ class ArubaSSH(CiscoSSHConnection):
 
         delay_factor = self.select_delay_factor(delay_factor=0)
         await asyncio.sleep(1 * delay_factor)
-        self._test_channel_read()
-        self.set_base_prompt()
+        await self._test_channel_read()
+        await self.set_base_prompt()
         self.enable()
         self.disable_paging(command="no paging")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def check_config_mode(self, check_string="(config) #", pattern=""):
         """

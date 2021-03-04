@@ -1,5 +1,4 @@
 import paramiko
-import time
 import asyncio
 import re
 from netmiko.cisco_base_connection import CiscoSSHConnection
@@ -32,12 +31,12 @@ class FortinetSSH(CiscoSSHConnection):
                 await asyncio.sleep(0.33 * delay_factor)
             count += 1
 
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt(alt_prompt_terminator="$")
         self.disable_paging()
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def disable_paging(self, delay_factor=1, **kwargs):
         """Disable paging is only available with specific roles so it may fail."""

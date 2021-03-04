@@ -1,5 +1,4 @@
 """Support for Extreme NOS/VDX."""
-import time
 import asyncio
 from netmiko.cisco_base_connection import CiscoSSHConnection
 

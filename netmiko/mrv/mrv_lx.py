@@ -1,5 +1,4 @@
 """MRV Communications Driver (LX)."""
-import time
 import asyncio
 import re
 
@@ -11,13 +10,13 @@ class MrvLxSSH(CiscoSSHConnection):
 
     async def session_preparation(self):
         """Prepare the session after the connection has been established."""
-        self._test_channel_read(pattern=r"[>|>>]")
+        await self._test_channel_read(pattern=r"[>|>>]")
         self.set_base_prompt()
         self.enable()
         self.disable_paging(command="no pause")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def check_enable_mode(self, check_string=">>"):
         """MRV has a >> for enable mode instead of # like Cisco"""

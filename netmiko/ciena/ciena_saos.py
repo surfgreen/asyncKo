@@ -1,5 +1,4 @@
 """Ciena SAOS support."""
-import time
 import asyncio
 import re
 import os
@@ -17,13 +16,13 @@ class CienaSaosBase(BaseConnection):
     check_config_mode()
     """
 
-     async def session_preparation(self):
-        self._test_channel_read()
-        self.set_base_prompt()
+    async def session_preparation(self):
+        await self._test_channel_read()
+        await self.set_base_prompt()
         self.disable_paging(command="system shell session set more off")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def _enter_shell(self):
         """Enter the Bourne Shell."""

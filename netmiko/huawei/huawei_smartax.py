@@ -1,4 +1,3 @@
-import time
 import asyncio
 import re
 from netmiko.cisco_base_connection import CiscoBaseConnection
@@ -11,13 +10,13 @@ class HuaweiSmartAXSSH(CiscoBaseConnection):
     async def session_preparation(self):
         """Prepare the session after the connection has been established."""
         self.ansi_escape_codes = True
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
-        self._disable_smart_interaction()
+        await self._disable_smart_interaction()
         self.disable_paging()
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def strip_ansi_escape_codes(self, string_buffer):
         """
@@ -39,7 +38,7 @@ class HuaweiSmartAXSSH(CiscoBaseConnection):
         """Disables the { <cr> } prompt to avoid having to sent a 2nd return after each command"""
         delay_factor = self.select_delay_factor(delay_factor)
         await asyncio.sleep(delay_factor * 0.1)
-        self.clear_buffer()
+        await self.clear_buffer()
         command = self.normalize_cmd(command)
         log.debug("In disable_smart_interaction")
         log.debug(f"Command: {command}")

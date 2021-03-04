@@ -1,5 +1,4 @@
 from netmiko.cisco_base_connection import CiscoSSHConnection
-import time
 import asyncio
 
 
@@ -9,12 +8,12 @@ class DlinkDSBase(CiscoSSHConnection):
     async def session_preparation(self):
         """Prepare the session after the connection has been established."""
         self.ansi_escape_codes = True
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
         self.disable_paging()
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def disable_paging(self, command="disable clipaging", delay_factor=1):
         return super().disable_paging(command=command, delay_factor=delay_factor)

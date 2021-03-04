@@ -1,5 +1,4 @@
 import re
-import time
 import asyncio
 import socket
 from os import path
@@ -24,14 +23,14 @@ class HPProcurveBase(CiscoSSHConnection):
         # HP output contains VT100 escape codes
         self.ansi_escape_codes = True
 
-        self._test_channel_read(pattern=r"[>#]")
+        await self._test_channel_read(pattern=r"[>#]")
         self.set_base_prompt()
         command = self.RETURN + "no page"
         self.set_terminal_width(command="terminal width 511", pattern="terminal")
         self.disable_paging(command=command)
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     async def enable(
         self,
@@ -67,7 +66,7 @@ class HPProcurveBase(CiscoSSHConnection):
             i += 1
 
         log.debug(f"{output}")
-        self.clear_buffer()
+        await self.clear_buffer()
         msg = (
             "Failed to enter enable mode. Please ensure you pass "
             "the 'secret' argument to ConnectHandler."
@@ -147,7 +146,7 @@ class HPProcurveSSH(HPProcurveBase):
         # Try one last time to past "Press any key to continue
         self.write_channel(self.RETURN)
 
-        super().session_preparation()
+        await super().session_preparation()
 
     def _build_ssh_client(self):
         """Allow passwordless authentication for HP devices being provisioned."""

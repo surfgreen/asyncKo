@@ -3,7 +3,6 @@ from netmiko.base_connection import BaseConnection
 from netmiko.scp_handler import BaseFileTransfer
 from netmiko.ssh_exception import NetmikoAuthenticationException
 import re
-import time
 import asyncio
 
 

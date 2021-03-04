@@ -1,4 +1,3 @@
-import time
 import asyncio
 from netmiko.base_connection import BaseConnection
 
@@ -14,11 +13,11 @@ class WatchguardFirewareSSH(BaseConnection):
 
         Set the base prompt for interaction ('#').
         """
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def check_config_mode(self, check_string=")#", pattern="#"):
         """

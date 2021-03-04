@@ -5,7 +5,6 @@ Expressway/VCS
 
 Written by Ahmad Barrin
 """
-import time
 import asyncio
 import re
 from netmiko.cisco_base_connection import CiscoSSHConnection
@@ -33,13 +32,13 @@ class CiscoTpTcCeSSH(CiscoSSHConnection):
         self.disable_paging()
         self.set_terminal_width()
         """
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
         self.set_terminal_width()
         self.disable_paging()
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def set_base_prompt(self, *args, **kwargs):
         """Use 'OK' as base_prompt."""

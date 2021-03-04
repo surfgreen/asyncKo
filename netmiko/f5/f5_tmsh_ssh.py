@@ -1,4 +1,3 @@
-import time
 import asyncio
 from netmiko.base_connection import BaseConnection
 
@@ -20,9 +19,9 @@ class F5TmshSSH(BaseConnection):
     async def tmsh_mode(self, delay_factor=1):
         """tmsh command is equivalent to config command on F5."""
         delay_factor = self.select_delay_factor(delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
         command = f"{self.RETURN}tmsh{self.RETURN}"
         self.write_channel(command)
         await asyncio.sleep(1 * delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
         return None

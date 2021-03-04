@@ -1,4 +1,3 @@
-import time
 import asyncio
 from netmiko.cisco_base_connection import CiscoSSHConnection
 
@@ -8,13 +7,13 @@ class VyOSSSH(CiscoSSHConnection):
 
     async def session_preparation(self):
         """Prepare the session after the connection has been established."""
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
         self.set_terminal_width(command="set terminal width 512", pattern="terminal")
         self.disable_paging(command="set terminal length 0")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def check_enable_mode(self, *args, **kwargs):
         """No enable mode on VyOS."""

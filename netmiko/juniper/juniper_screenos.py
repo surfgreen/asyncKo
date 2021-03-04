@@ -1,4 +1,3 @@
-import time
 import asyncio
 from netmiko.base_connection import BaseConnection
 
@@ -15,12 +14,12 @@ class JuniperScreenOsSSH(BaseConnection):
         Disable paging (the '--more--' prompts).
         Set the base prompt for interaction ('>').
         """
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
         self.disable_paging(command="set console page 0")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def check_enable_mode(self, *args, **kwargs):
         """No enable mode on Juniper ScreenOS."""

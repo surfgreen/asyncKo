@@ -1,4 +1,3 @@
-import time
 import asyncio
 from netmiko.ubiquiti.edge_ssh import UbiquitiEdgeSSH
 
@@ -13,9 +12,9 @@ class UbiquitiUnifiSwitchSSH(UbiquitiEdgeSSH):
         environment.
         """
 
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
-        self.send_command(
+        await self.send_command(
             command_string="telnet localhost", expect_string=r"\(UBNT\) >"
         )
         self.set_base_prompt()
@@ -24,7 +23,7 @@ class UbiquitiUnifiSwitchSSH(UbiquitiEdgeSSH):
 
         # Clear read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def cleanup(self, command="exit"):
         """Gracefully exit the SSH session."""

@@ -1,5 +1,4 @@
 """Alcatel-Lucent Enterprise AOS support (AOS6 and AOS8)."""
-import time
 import asyncio
 from netmiko.cisco_base_connection import CiscoSSHConnection
 
@@ -9,11 +8,11 @@ class AlcatelAosSSH(CiscoSSHConnection):
 
     async def session_preparation(self):
         # Prompt can be anything, but best practice is to end with > or #
-        self._test_channel_read(pattern=r"[>#]")
-        self.set_base_prompt()
+        await self._test_channel_read(pattern=r"[>#]")
+        await self.set_base_prompt()
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def check_enable_mode(self, *args, **kwargs):
         """No enable mode on AOS"""

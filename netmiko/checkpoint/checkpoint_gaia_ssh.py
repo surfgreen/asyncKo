@@ -1,4 +1,3 @@
-import time
 import asyncio
 from netmiko.base_connection import BaseConnection
 
@@ -9,18 +8,18 @@ class CheckPointGaiaSSH(BaseConnection):
     firewalls.
     """
 
-    await def session_preparation(self):
+    async def session_preparation(self):
         """
         Prepare the session after the connection has been established.
 
         Set the base prompt for interaction ('>').
         """
-        self._test_channel_read()
+        await self._test_channel_read()
         self.set_base_prompt()
         self.disable_paging(command="set clienv rows 0")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def config_mode(self, config_command=""):
         """No config mode for Check Point devices."""

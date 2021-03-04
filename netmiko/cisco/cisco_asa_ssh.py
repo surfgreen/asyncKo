@@ -1,7 +1,6 @@
 """Subclass specific to Cisco ASA."""
 import re
 import asyncio
-import time
 from netmiko.cisco_base_connection import CiscoSSHConnection, CiscoFileTransfer
 from netmiko.ssh_exception import NetmikoAuthenticationException
 
