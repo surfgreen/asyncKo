@@ -1155,7 +1155,7 @@ Device settings: {self.device_type} {self.host}:{self.port}
         :param delay_factor: See __init__: global_delay_factor
         :type delay_factor: int
         """
-        prompt = await self.find_prompt(delay_factor=delay_factor)
+        prompt = self.find_prompt(delay_factor=delay_factor)
         if not prompt[-1] in (pri_prompt_terminator, alt_prompt_terminator):
             raise ValueError(f"Router prompt not found: {repr(prompt)}")
         # Strip off trailing terminator

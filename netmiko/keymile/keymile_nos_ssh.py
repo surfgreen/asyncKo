@@ -14,7 +14,7 @@ class KeymileNOSSSH(CiscoIosBase):
         await asyncio.sleep(0.3 * self.global_delay_factor)
         await self.clear_buffer()
 
-    def _test_channel_read(self, count=40, pattern=""):
+    async def _test_channel_read(self, count=40, pattern=""):
         """Since Keymile NOS always returns True on paramiko.connect() we
         check the output for substring Login incorrect after connecting."""
         output = super()._test_channel_read(count=count, pattern=pattern)

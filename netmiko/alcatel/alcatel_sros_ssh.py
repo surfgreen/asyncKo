@@ -9,7 +9,7 @@ class AlcatelSrosSSH(CiscoSSHConnection):
 
     async def session_preparation(self):
         await self._test_channel_read()
-        await self.set_base_prompt()
+        self.set_base_prompt()
         self.disable_paging(command="environment no more")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)

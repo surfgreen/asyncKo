@@ -1,5 +1,4 @@
 """MRV Communications Driver (OptiSwitch)."""
-import time
 import asyncio
 import re
 
@@ -11,14 +10,14 @@ class MrvOptiswitchSSH(CiscoSSHConnection):
 
     async def session_preparation(self):
         """Prepare the session after the connection has been established."""
-        self._test_channel_read(pattern=r"[>#]")
+        await self._test_channel_read(pattern=r"[>#]")
         self.set_base_prompt()
         self.enable()
         self.disable_paging(command="no cli-paging")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
         self.set_base_prompt()
-        self.clear_buffer()
+        await self.clear_buffer()
 
     def enable(self, cmd="enable", pattern=r"#", re_flags=re.IGNORECASE):
         """Enable mode on MRV uses no password."""
