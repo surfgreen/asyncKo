@@ -777,7 +777,7 @@ class BaseConnection(object):
         self.remote_conn.close()
         raise NetmikoAuthenticationException(msg)
 
-    def _try_session_preparation(self):
+    async def _try_session_preparation(self):
         """
         In case of an exception happening during `session_preparation()` Netmiko should
         gracefully clean-up after itself. This might be challenging for library users
@@ -785,7 +785,7 @@ class BaseConnection(object):
         to threads used in Paramiko.
         """
         try:
-            self.session_preparation()
+            await self.session_preparation()
         except Exception:
             self.disconnect()
             raise
