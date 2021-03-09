@@ -315,9 +315,9 @@ async def ConnectHandler(*args, **kwargs):
     return await ConnectionClass(*args, **kwargs)
 
 
-async def ssh_dispatcher(device_type):
+def ssh_dispatcher(device_type):
     """Select the class to be instantiated based on vendor/platform."""
-    return await CLASS_MAPPER[device_type]
+    return CLASS_MAPPER[device_type]
 
 
 def redispatch(obj, device_type, session_prep=True):
