@@ -92,8 +92,9 @@ class TPLinkJetStreamBase(CiscoSSHConnection):
             check_count -= 1
 
         if self.check_config_mode():
-            raise ValueError("Failed to exit configuration mode")
             log.debug(f"exit_config_mode: {output}")
+            raise ValueError("Failed to exit configuration mode")
+
 
         return output
 
