@@ -1026,7 +1026,7 @@ Device settings: {self.device_type} {self.host}:{self.port}
             else:
                 self.write_channel(self.RETURN)
 
-            main_delay = _increment_delay(main_delay)
+            main_delay = asyncio.run(_increment_delay(main_delay))
             await asyncio.sleep(main_delay)
             i += 1
 
@@ -1155,7 +1155,7 @@ Device settings: {self.device_type} {self.host}:{self.port}
         :param delay_factor: See __init__: global_delay_factor
         :type delay_factor: int
         """
-        prompt = self.find_prompt(delay_factor=delay_factor)
+        prompt = asyncio.run(self.find_prompt(delay_factor=delay_factor))
         if not prompt[-1] in (pri_prompt_terminator, alt_prompt_terminator):
             raise ValueError(f"Router prompt not found: {repr(prompt)}")
         # Strip off trailing terminator
@@ -1294,7 +1294,7 @@ Device settings: {self.device_type} {self.host}:{self.port}
         # if cmd is just an "enter" skip this section
         if cmd and cmd_verify:
             # Make sure you read until you detect the command echo (avoid getting out of sync)
-            new_data = self.read_until_pattern(pattern=re.escape(cmd))
+            new_data = asyncio.run(self.read_until_pattern(pattern=re.escape(cmd)))
             new_data = self.normalize_linefeeds(new_data)
 
             # Strip off everything before the command echo
@@ -1487,7 +1487,7 @@ Device settings: {self.device_type} {self.host}:{self.port}
         # if cmd is just an "enter" skip this section
         if cmd and cmd_verify:
             # Make sure you read until you detect the command echo (avoid getting out of sync)
-            new_data = self.read_until_pattern(pattern=re.escape(cmd))
+            new_data = asyncio.run(self.read_until_pattern(pattern=re.escape(cmd)))
             new_data = self.normalize_linefeeds(new_data)
             # Strip off everything before the command echo (to avoid false positives on the prompt)
             if new_data.count(cmd) == 1:
@@ -1872,7 +1872,7 @@ Device settings: {self.device_type} {self.host}:{self.port}
                 self.write_channel(self.normalize_cmd(cmd))
 
                 # Make sure command is echoed
-                new_output = self.read_until_pattern(pattern=re.escape(cmd.strip()))
+                new_output = asyncio.run(self.read_until_pattern(pattern=re.escape(cmd.strip())))
                 output += new_output
 
                 # We might capture next prompt in the original read
