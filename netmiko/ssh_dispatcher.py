@@ -299,7 +299,7 @@ telnet_platforms_str = "\n".join(telnet_platforms)
 telnet_platforms_str = "\n" + telnet_platforms_str
 
 
-async def ConnectHandler(*args, **kwargs):
+def ConnectHandler(*args, **kwargs):
     """Factory function selects the proper class and creates object based on device_type."""
     device_type = kwargs["device_type"]
     if device_type not in platforms:
@@ -311,8 +311,8 @@ async def ConnectHandler(*args, **kwargs):
             "Unsupported 'device_type' "
             "currently supported platforms are: {}".format(msg_str)
         )
-    ConnectionClass = await ssh_dispatcher(device_type)
-    return await ConnectionClass(*args, **kwargs)
+    ConnectionClass = ssh_dispatcher(device_type)
+    return ConnectionClass(*args, **kwargs)
 
 
 def ssh_dispatcher(device_type):
