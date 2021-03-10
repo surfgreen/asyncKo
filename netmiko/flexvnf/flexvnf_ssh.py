@@ -12,14 +12,14 @@ class FlexvnfSSH(BaseConnection):
         Disable paging (the '--more--' prompts).
         Set the base prompt for interaction ('>').
         """
-        await self._test_channel_read()
-        await self.enter_cli_mode()
+        await asyncio.create_task(self._test_channel_read())
+        await asyncio.create_task(self.enter_cli_mode())
         self.set_base_prompt()
         self.set_terminal_width(command="set screen width 511", pattern="set")
         self.disable_paging(command="set screen length 0")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        await self.clear_buffer()
+        await asyncio.create_task(self.clear_buffer())
 
     async def enter_cli_mode(self):
         """Check if at shell prompt root@ and go into CLI."""
@@ -35,7 +35,7 @@ class FlexvnfSSH(BaseConnection):
             ):
                 self.write_channel("cli" + self.RETURN)
                 await asyncio.sleep(0.3 * delay_factor)
-                await self.clear_buffer()
+                await asyncio.create_task(self.clear_buffer())
                 break
             elif ">" in cur_prompt or "%" in cur_prompt:
                 break

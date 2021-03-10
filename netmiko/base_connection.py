@@ -565,7 +565,7 @@ class BaseConnection(object):
             if self.protocol == "ssh":
                 try:
                     # If no data available will wait timeout seconds trying to read
-                    await self._lock_netmiko_session()
+                    await asyncio.create_task(self._lock_netmiko_session())
                     new_data = self.remote_conn.recv(MAX_BUFFER)
                     if len(new_data) == 0:
                         raise EOFError("Channel stream closed by remote device.")

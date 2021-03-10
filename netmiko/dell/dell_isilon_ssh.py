@@ -23,22 +23,22 @@ class DellIsilonSSH(BaseConnection):
     async def session_preparation(self):
         """Prepare the session after the connection has been established."""
         self.ansi_escape_codes = True
-        await self.zsh_mode()
-        await self.find_prompt(delay_factor=1)
+        await asyncio.create_task(self.zsh_mode())
+        await asyncio.create_task(self.find_prompt(delay_factor=1))
         self.set_base_prompt()
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        await self.clear_buffer()
+        await asyncio.create_task(self.clear_buffer())
 
     async def zsh_mode(self, delay_factor=1, prompt_terminator="$"):
         """Run zsh command to unify the environment"""
         delay_factor = self.select_delay_factor(delay_factor)
-        await self.clear_buffer()
+        await asyncio.create_task(self.clear_buffer())
         command = self.RETURN + "zsh" + self.RETURN
         self.write_channel(command)
         await asyncio.sleep(1 * delay_factor)
         self.set_prompt()
-        await self.clear_buffer()
+        await asyncio.create_task(self.clear_buffer())
 
     def set_prompt(self, prompt_terminator="$"):
         prompt = f"PROMPT='%m{prompt_terminator}'"

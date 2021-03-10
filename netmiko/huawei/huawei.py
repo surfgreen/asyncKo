@@ -9,12 +9,12 @@ class HuaweiBase(CiscoBaseConnection):
     async def session_preparation(self):
         """Prepare the session after the connection has been established."""
         self.ansi_escape_codes = True
-        await self._test_channel_read()
-        await self.set_base_prompt()
+        await asyncio.create_task(self._test_channel_read())
+        await asyncio.create_task(self.set_base_prompt())
         self.disable_paging(command="screen-length 0 temporary")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        await self.clear_buffer()
+        await asyncio.create_task(self.clear_buffer())
 
     def strip_ansi_escape_codes(self, string_buffer):
         """
@@ -69,7 +69,7 @@ class HuaweiBase(CiscoBaseConnection):
         """
         # log.debug("In set_base_prompt")
         delay_factor = self.select_delay_factor(delay_factor)
-        await self.clear_buffer()
+        await asyncio.create_task(self.clear_buffer())
         self.write_channel(self.RETURN)
         await asyncio.sleep(0.5 * delay_factor)
 

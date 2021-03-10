@@ -19,9 +19,9 @@ class F5TmshSSH(BaseConnection):
     async def tmsh_mode(self, delay_factor=1):
         """tmsh command is equivalent to config command on F5."""
         delay_factor = self.select_delay_factor(delay_factor)
-        await self.clear_buffer()
+        await asyncio.create_task(self.clear_buffer())
         command = f"{self.RETURN}tmsh{self.RETURN}"
         self.write_channel(command)
         await asyncio.sleep(1 * delay_factor)
-        await self.clear_buffer()
+        await asyncio.create_task(self.clear_buffer())
         return None

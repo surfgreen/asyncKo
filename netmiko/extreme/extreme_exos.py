@@ -11,13 +11,13 @@ class ExtremeExosBase(CiscoSSHConnection):
     """
 
     async def session_preparation(self):
-        await self._test_channel_read()
+        await asyncio.create_task(self._test_channel_read())
         self.set_base_prompt()
         self.disable_paging(command="disable clipaging")
         self.send_command_timing("disable cli prompting")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        await self.clear_buffer()
+        await asyncio.create_task(self.clear_buffer())
 
     def set_base_prompt(self, *args, **kwargs):
         """

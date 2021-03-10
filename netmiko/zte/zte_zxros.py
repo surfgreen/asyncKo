@@ -6,12 +6,12 @@ from telnetlib import IAC, DO, DONT, WILL, WONT, SB, SE, ECHO, SGA, NAWS
 class ZteZxrosBase(CiscoBaseConnection):
     async def session_preparation(self):
         """Prepare the session after the connection has been established."""
-        await self._test_channel_read(pattern=r"[>#]")
+        await asyncio.create_task(self._test_channel_read(pattern=r"[>#]"))
         self.set_base_prompt()
         self.disable_paging()
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        await self.clear_buffer()
+        await asyncio.create_task(self.clear_buffer())
 
     def check_config_mode(self, check_string=")#", pattern="#"):
         """

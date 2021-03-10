@@ -25,14 +25,14 @@ class HPComwareBase(CiscoSSHConnection):
             i += 1
 
         await asyncio.sleep(0.3 * delay_factor)
-        await self.clear_buffer()
-        await self._test_channel_read(pattern=r"[>\]]")
+        await asyncio.create_task(self.clear_buffer())
+        await asyncio.create_task(self._test_channel_read(pattern=r"[>\]]"))
         self.set_base_prompt()
         command = self.RETURN + "screen-length disable"
         self.disable_paging(command=command)
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        await self.clear_buffer()
+        await asyncio.create_task(self.clear_buffer())
 
     def config_mode(self, config_command="system-view"):
         """Enter configuration mode."""

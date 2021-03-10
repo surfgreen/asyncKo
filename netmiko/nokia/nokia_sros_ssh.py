@@ -36,11 +36,11 @@ class NokiaSrosSSH(BaseConnection):
     """
 
     async def session_preparation(self):
-        await self._test_channel_read()
+        await asyncio.create_task(self._test_channel_read())
         self.set_base_prompt()
         # "@" indicates model-driven CLI (vs Classical CLI)
         if "@" in self.base_prompt:
-            await self._disable_complete_on_space()
+            await asyncio.create_task(self._disable_complete_on_space())
             self.set_terminal_width(
                 command="environment console width 512", pattern="environment"
             )
@@ -55,7 +55,7 @@ class NokiaSrosSSH(BaseConnection):
 
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        await self.clear_buffer()
+        await asyncio.create_task(self.clear_buffer())
 
     def set_base_prompt(self, *args, **kwargs):
         """Remove the > when navigating into the different config level."""

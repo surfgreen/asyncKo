@@ -6,12 +6,12 @@ class RadETXBase(BaseConnection):
     """RAD ETX Support, Tested on RAD 203AX, 205A and 220A."""
 
     async def session_preparation(self):
-        await self._test_channel_read()
+        await asyncio.create_task(self._test_channel_read())
         self.set_base_prompt()
         self.disable_paging(command="config term length 0")
         # Clear the read buffer
         await asyncio.sleep(0.3 * self.global_delay_factor)
-        await self.clear_buffer()
+        await asyncio.create_task(self.clear_buffer())
 
     def save_config(self, cmd="admin save", confirm=False, confirm_response=""):
         """Saves Config Using admin save."""
