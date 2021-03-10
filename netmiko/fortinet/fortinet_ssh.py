@@ -78,7 +78,7 @@ class FortinetSSH(CiscoSSHConnection):
     def _retrieve_output_mode(self):
         """Save the state of the output mode so it can be reset at the end of the session."""
         reg_mode = re.compile(r"output\s+:\s+(?P<mode>.*)\s+\n")
-        output = asyncio.run(self.send_command("get system console"))
+        output = await asyncio.create_task(self.send_command("get system console"))
         result_mode_re = reg_mode.search(output)
         if result_mode_re:
             result_mode = result_mode_re.group("mode").strip()
