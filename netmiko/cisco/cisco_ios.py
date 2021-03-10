@@ -14,7 +14,7 @@ class CiscoIosBase(CiscoBaseConnection):
         # Cisco-IOS defaults to fast_cli=True and legacy_mode=False
         kwargs.setdefault("fast_cli", True)
         kwargs.setdefault("_legacy_mode", False)
-        return await super().__init__(*args, **kwargs)
+        return super().__init__(*args, **kwargs)
 
     def session_preparation(self):
         """Prepare the session after the connection has been established."""
