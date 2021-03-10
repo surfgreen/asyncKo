@@ -299,7 +299,7 @@ telnet_platforms_str = "\n".join(telnet_platforms)
 telnet_platforms_str = "\n" + telnet_platforms_str
 
 
-def ConnectHandler(*args, **kwargs):
+async def ConnectHandler(*args, **kwargs):
     """Factory function selects the proper class and creates object based on device_type."""
     device_type = kwargs["device_type"]
     if device_type not in platforms:
@@ -311,11 +311,11 @@ def ConnectHandler(*args, **kwargs):
             "Unsupported 'device_type' "
             "currently supported platforms are: {}".format(msg_str)
         )
-    ConnectionClass = ssh_dispatcher(device_type)
+    ConnectionClass = await ssh_dispatcher(device_type)
     return ConnectionClass(*args, **kwargs)
 
 
-def ssh_dispatcher(device_type):
+async def ssh_dispatcher(device_type):
     """Select the class to be instantiated based on vendor/platform."""
     return CLASS_MAPPER[device_type]
 
@@ -325,7 +325,7 @@ def redispatch(obj, device_type, session_prep=True):
     Generally used with terminal_server device_type when you need to redispatch after interacting
     with terminal server.
     """
-    new_class = ssh_dispatcher(device_type)
+    new_class = await ssh_dispatcher(device_type)
     obj.device_type = device_type
     obj.__class__ = new_class
     if session_prep:
