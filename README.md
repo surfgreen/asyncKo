@@ -1,4 +1,6 @@
 # asyncKo
-Fork of the netmiko library updated to work with the Python 3.9 asyncio library.
 
-This code is not operational but it will be soon.  Check back in a few days for updates as this code will be updated frequently.
+Netmiko library updated to work with asynchronous connections.
+
+This code is not yet operational but it will be soon. 
+Check back for updates as this code will be updated frequently.  
