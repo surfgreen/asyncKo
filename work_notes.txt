@@ -1,0 +1,70 @@
+###################### Paramiko ############################
+
+paramiko.AutoAddPolicy() Policy for automatically adding the hostname and new host key to the local `.HostKeys` object, and saving it.  This is used by `.SSHClient`
+paramiko.RejectPolicy()  Policy for automatically adding the hostname and new host key to the local `.HostKeys` object, and saving it.  This is used by `.SSHClient`
+paramiko.SSHConfig()  Create a new OpenSSH config Object.
+<OpenSSH config object>.lookup() Return a dict (SSHConfigDict) of config options for a given hostname.  The host-matching rules of OpenSSH's ssh_config man page are used
+paramiko.SSHClient()  Create a new SSHClient Object
+paramiko.ProxyCommand()  Create a new CommandProxy instance. The instance created by this class can be passed as an argument to the .Transport class. Class Wraps a subprocess running ProxyCommand-driven programs.  
+paramiko.ssh_exception.AuthenticationException  Exception raised when authentication failed for some reason.
+paramiko.ssh_exception.SSHException Exception raised by failures in SSH2 protocol negotiation or logic errors
+<SSHClient object>.load_system_host_keys() Load host keys from a system (read-only) file. Host keys read with this method will not be saved back by save_host_keys.
+<SSHClient object>.set_missing_host_key_policy  Set policy to use when connecting to servers without a known host key.
+
+
+####################### AsynSSH ##############################
+
+AsyncSSH
+
+asyncssh.config.SSHConfig
+asyncssh.SSHConfig
+
+
+####### Netmiko base_connection.py paramiko paramiters ########
+
+pkey: paramiko.PKey  (pkey: SSH key object to use)
+banner_timeout: float (pass to Paramiko)
+
+###################### Misc AsynSSH ###########################
+
+Remote listeners for forwarded TCP connections can be opened by calling 
+create_server() set_extra_info(**kwargs)
+
+set_extra_info(**kwargs)
+Store additional information associated with the connection
+
+
+########### Paramiko connection parameters ###################
+
+"""Generate dictionary of Paramiko connection parameters."""
+        conn_dict = {
+            "hostname": self.host,
+            "port": self.port,
+            "username": self.username,
+            "password": self.password,
+            "look_for_keys": self.use_keys,
+            "allow_agent": self.allow_agent,
+            "key_filename": self.key_file,
+            "pkey": self.pkey,
+            "passphrase": self.passphrase,
+            "timeout": self.conn_timeout,
+            "auth_timeout": self.auth_timeout,
+            "banner_timeout": self.banner_timeout,
+            "sock": self.sock,
+        }
+
+
+####### Netmiko Varbailes that are Parimiko in Nature ########
+-In base_connection.py:
+	remote_conn_pre  <SSHClient object>
+	_build_ssh_client() <SSHClient object>
+	.remote_conn  <SSHClient object>.invoke_shell
+	paramiko_cleanup  netmiko fucntion that uses the  self.remote_conn_pre.close() and del self.remote_conn_pre
+	.key_policy paramiko.AutoAddPolicy() or paramiko.RejectPolicy() used as input for remote_conn_pre.set_missing_host_key_policy(self.key_policy)
+	ssh_config_instance   paramiko.SSHConfig()
+	ssh_config_instance.parse(f) Read an OpenSSH config from the given file object (with io.open(full_path, "rt", encoding="utf-8") as f)
+	connect_dict["sock"] = proxy   (CommandProxy instance)
+	paramiko_cleanup()   del self.remote_conn_pre
+
+
+
